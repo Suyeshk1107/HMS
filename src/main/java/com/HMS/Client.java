@@ -1,4 +1,4 @@
-package com.client;
+package com.HMS;
 
 public class Client {
 
