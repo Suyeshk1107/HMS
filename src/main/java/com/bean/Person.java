@@ -15,5 +15,5 @@ public class Person {
 	private int age;
 	private String gender;
 	private String contactNumber;
-	private String Department;
+//	private String Department;
 }

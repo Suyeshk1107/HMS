@@ -13,7 +13,7 @@ boolean getPatientProfile(int doctorId, int patientId);
 	
 	boolean updateDoctorSchedule(int doctorId);
 	
-	Map<String,String> getAvailableDoctors();
+//	Map<String,String> getAvailableDoctors();
 	
 	boolean displayAvailableDoctors(); //doctor list + emergencyContact
 }

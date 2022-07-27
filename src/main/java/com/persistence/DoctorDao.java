@@ -2,7 +2,7 @@ package com.persistence;
 
 import java.util.List;
 
-import bean.Doctor;
+import com.bean.Doctor;
 
 public interface DoctorDao {
 
@@ -19,5 +19,5 @@ public interface DoctorDao {
 	
 	boolean getEmergencyContact(int doctorId);
 	
-	List<String> getAvailableDoctors();
+	List<Doctor> getAvailableDoctors();
 }

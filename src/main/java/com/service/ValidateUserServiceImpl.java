@@ -1,5 +1,8 @@
 package com.service;
 
+import com.bean.Doctor;
+import com.bean.Patient;
+
 public class ValidateUserServiceImpl implements ValidateUserService {
 
 	@Override
@@ -19,6 +22,7 @@ public class ValidateUserServiceImpl implements ValidateUserService {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 
 	@Override
 	public boolean registerPatient(Patient patient) {

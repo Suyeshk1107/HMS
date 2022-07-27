@@ -1,6 +1,7 @@
 package com.service;
 
-import java.sql.Date;
+//import java.sql.Date;
+import java.util.Date;
 
 public class PatientServiceImpl implements PatientService {
 
