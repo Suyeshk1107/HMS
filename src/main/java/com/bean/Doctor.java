@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class Doctor extends Person {
 	private String Specialization;
 	private int experienceInYears;
-	private int casesHandled;
+//	private int casesHandled;
 	private boolean isAvailable = true;
 }

@@ -1,6 +1,6 @@
 package com.service;
 
-import java.sql.Date;
+import java.util.Date;
 
 public interface PatientService {
 
@@ -10,5 +10,5 @@ public interface PatientService {
 	
 	boolean rescheduleAppointment(int patientId, Date newDate);
 	
-	boolean getPatientProfile(int patientId); //can check only his/her patientHidtory
+	boolean getPatientProfile(int patientId); //can check only his/her patientHistory
 }

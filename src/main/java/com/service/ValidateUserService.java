@@ -1,7 +1,7 @@
 package com.service;
 
-import bean.Doctor;
-import bean.Patient;
+import com.bean.Doctor;
+import com.bean.Patient;
 
 public interface ValidateUserService {
 boolean isPatient(int id, String Password);

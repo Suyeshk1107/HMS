@@ -1,8 +1,8 @@
 package com.persistence;
 
-import bean.Admin;
-import bean.Doctor;
-import bean.Patient;
+import com.bean.Admin;
+import com.bean.Doctor;
+import com.bean.Patient;
 
 public interface LoginDao {
 
@@ -10,14 +10,17 @@ public interface LoginDao {
 
 	boolean setAdmin(Admin admin);
 	
-	boolean addPatientToDatabase(Patient patient);
-	
-	boolean removePatientFromDatabase(int patientId);
-	
-	boolean addDoctorToDatabase(Doctor doctor);
-	
-	boolean removeDoctorFromDatabase(int patientId);
+//	boolean addPatientToDatabase(Patient patient);
+//	
+//	boolean removePatientFromDatabase(int patientId);
+//	
+//	boolean addDoctorToDatabase(Doctor doctor);
+//	
+//	boolean removeDoctorFromDatabase(int patientId);
+//	
 	
 	boolean getPassword(int id);
 	
 }
+
+//transaction, appointment

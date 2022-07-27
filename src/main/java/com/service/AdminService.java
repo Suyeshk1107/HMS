@@ -1,6 +1,8 @@
 package com.service;
 
-import bean.Doctor;
+import java.util.List;
+
+import com.bean.Doctor;
 
 public interface AdminService {
 
@@ -18,7 +20,9 @@ public interface AdminService {
 	
 	boolean removeDoctorFromDatabase(Doctor doctor);
 	
+	List<Doctor> getAvailableDoctors();
 	
+//	boolean displayAvailableDoctors(); //doctor list + emergencyContact
 	//add patient, and remove patient
 //	multiple patients can be mapped to one doctor
 }

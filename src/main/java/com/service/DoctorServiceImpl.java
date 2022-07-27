@@ -29,11 +29,11 @@ public class DoctorServiceImpl implements DoctorService {
 		return false;
 	}
 
-	@Override
-	public Map<String, String> getAvailableDoctors() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public Map<String, String> getAvailableDoctors() {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 	@Override
 	public boolean displayAvailableDoctors() {

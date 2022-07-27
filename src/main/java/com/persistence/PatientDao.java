@@ -1,6 +1,6 @@
 package com.persistence;
 
-import bean.Patient;
+import com.bean.Patient;
 
 public interface PatientDao {
 
