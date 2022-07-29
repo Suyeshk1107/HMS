@@ -12,4 +12,6 @@ public class Doctor extends Person {
 	private int experienceInYears;
 //	private int casesHandled;
 	private boolean isAvailable = true;
+	
+	
 }
