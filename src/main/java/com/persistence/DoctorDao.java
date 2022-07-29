@@ -13,7 +13,7 @@ public interface DoctorDao {
 	
 	boolean getDoctorList();
 	
-	int addDoctor(Doctor doctor); //return type changed
+	boolean addDoctor(Doctor doctor); //return type changed
 	
 	boolean removeDoctor(int doctorId);
 	

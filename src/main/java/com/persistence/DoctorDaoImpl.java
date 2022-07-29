@@ -41,7 +41,7 @@ public class DoctorDaoImpl implements DoctorDao {
 	}
 	
 	@Override
-	public int addDoctor(Doctor doctor) {
+	public boolean addDoctor(Doctor doctor) {
 		// TODO Auto-generated method stub
 		int rows = 0;
 		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
@@ -59,29 +59,38 @@ public class DoctorDaoImpl implements DoctorDao {
 			preparedStatement.setString(8, doctor.getAddress());
 
 			rows = preparedStatement.executeUpdate();
+			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 
-		return rows;
+		return true;
 	}
 
 	@Override
 	public boolean removeDoctor(int doctorId) {
 		// TODO Auto-generated method stub
 //		Doctor doctor = null;
+		int rows;
 		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
 				"wiley");
 				PreparedStatement preparedStatement = connection
 						.prepareStatement("DELETE FROM DOCTOR where doctor_id=?");) {
 			preparedStatement.setInt(1, doctorId);
 
-			preparedStatement.executeUpdate();
-			System.out.println("Record deleted successfully");
+			rows = preparedStatement.executeUpdate();
+//			System.out.println("Record deleted successfully");
+			
+			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			return false;
+		}
+		if(rows<1) {
+			return false;
 		}
 		return true;
 	}
