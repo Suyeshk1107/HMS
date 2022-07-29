@@ -1,17 +1,19 @@
 package com.persistence;
 
+import java.util.List;
+
 import com.bean.Patient;
 
 public interface PatientDao {
 
 
-	boolean getPatientList();
+	List<Patient> getPatientList();
 	
-	boolean getPatientDetails(int patientId);
+	Patient getPatientById(int patientId);
 	
 	boolean addPatient(Patient patient);
 	
 	boolean removePatient(int patientId);
 	
-	boolean searchPatientId(String patientName);
+//	boolean searchPatientId(String patientName);
 }

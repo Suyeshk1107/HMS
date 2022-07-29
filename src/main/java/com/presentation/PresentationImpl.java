@@ -205,22 +205,22 @@ public class PresentationImpl implements Presentation {
 		String department = sc.next();
 		System.out.println("Set password : ");
 		String password = sc.nextLine();
-		Patient patient = new Patient(password, name, age, gender, contactNumber);
+//		Patient patient = new Patient(name, age, gender, contactNumber);
 		
 		ValidateUserServiceImpl user = new ValidateUserServiceImpl();
 		
-		boolean isDone = user.registerPatient(patient);
+//		boolean isDone = user.registerPatient(patient);
 		
-		if(isDone) {
-			System.out.println("User registered Successfully");
-//			int id = patient.getPersonId();
-//			System.out.println("Your patient Id is "+id+". Please note it down and keep it safe for future login purposes.");
-			
-		}else {
-			System.out.println("Operation failed");
-			System.out.println("Please try again.");
-			return;
-		}
+//		if(isDone) {
+//			System.out.println("User registered Successfully");
+////			int id = patient.getPersonId();
+////			System.out.println("Your patient Id is "+id+". Please note it down and keep it safe for future login purposes.");
+//			
+//		}else {
+//			System.out.println("Operation failed");
+//			System.out.println("Please try again.");
+//			return;
+//		}
 	}
 
 }

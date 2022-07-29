@@ -1,5 +1,6 @@
 package com.persistence;
 
+import java.util.Date;
 import java.util.List;
 
 import com.bean.Doctor;
@@ -7,17 +8,17 @@ import com.bean.Doctor;
 public interface DoctorDao {
 
 	
-	boolean searchDoctorId(String doctorName);
+	int searchDoctorId(String doctorName);
 	
-	boolean getDoctorDetails(int doctorId);
+	Doctor getDoctorDetails(int doctorId);
 	
-	boolean getDoctorList();
+	List<Doctor> getDoctorList();
 	
 	boolean addDoctor(Doctor doctor); //return type changed
 	
 	boolean removeDoctor(int doctorId);
 	
-	boolean getEmergencyContact(int doctorId);
+	String getEmergencyContact(int doctorId);
 	
-	List<Doctor> getAvailableDoctors();
+	List<Doctor> getAvailableDoctors(Date date);
 }
