@@ -8,6 +8,7 @@ public class DoctorServiceImpl implements DoctorService {
 	@Override
 	public boolean getPatientProfile(int doctorId, int patientId) {
 		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
