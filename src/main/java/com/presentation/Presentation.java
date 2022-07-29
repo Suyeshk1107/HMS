@@ -7,9 +7,9 @@ public interface Presentation {
 	
 	void performMenu(int choice);
 
-	void signIn(int selection);
-
 	void logIn(int choice);
 
 	void register();
+
+	void signIn();
 }

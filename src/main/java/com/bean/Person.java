@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 public class Person {
 
 	private int personId;
-	private String password;
+//	private String password;
 	private String Name;
 	private int age;
 	private String gender;
 	private String contactNumber;
-//	private String Department;
+	private String Department;
 }
