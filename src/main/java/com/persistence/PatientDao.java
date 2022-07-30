@@ -9,11 +9,11 @@ public interface PatientDao {
 
 	List<Patient> getPatientList();
 	
-	Patient getPatientById(int patientId);
-	
 	boolean addPatient(Patient patient);
-	
-	boolean removePatient(int patientId);
+
+	boolean removePatient(String patientId);
+
+	Patient getPatientById(String patientId);
 	
 //	boolean searchPatientId(String patientName);
 //	boolean searchPatientId(String patientName);

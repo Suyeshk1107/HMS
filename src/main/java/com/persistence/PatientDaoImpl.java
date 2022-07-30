@@ -23,7 +23,7 @@ public class PatientDaoImpl implements PatientDao {
 			ResultSet resultSet = statement.executeQuery("SELECT * FROM PATIENT");
 
 			while (resultSet.next()) {
-				int id = resultSet.getInt("patient_id");
+				String id = resultSet.getString("patient_id");
 				String name = resultSet.getString("name_of_patient");
 				String gender = resultSet.getString("gender");
 				int age = resultSet.getInt("age");
@@ -31,7 +31,7 @@ public class PatientDaoImpl implements PatientDao {
 				String address = resultSet.getString("Address");
 				String dept = resultSet.getString("department");
 				
-
+				
 				patientList.add(new Patient(id,name,age,gender,contact,dept,address));
 			}
 
@@ -42,11 +42,6 @@ public class PatientDaoImpl implements PatientDao {
 		return patientList;
 	}
 
-	@Override
-	public boolean getPatientDetails(String patientId) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	@Override
 	public boolean addPatient(Patient patient) {
@@ -57,7 +52,7 @@ public class PatientDaoImpl implements PatientDao {
 				PreparedStatement preparedStatement = connection
 						.prepareStatement("INSERT INTO PATIENT values(?,?,?,?,?,?,?)");) {
 
-			preparedStatement.setInt(1, patient.getPersonId());
+			preparedStatement.setString(1, patient.getPersonId());
 			preparedStatement.setString(2, patient.getName());
 			preparedStatement.setString(3, patient.getGender());
 			preparedStatement.setInt(4, patient.getAge());
@@ -77,13 +72,13 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 	@Override
-	public boolean removePatient(int patientId) {
+	public boolean removePatient(String patientId) {
 		// TODO Auto-generated method stub
 		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
 				"wiley");
 				PreparedStatement preparedStatement = connection
 						.prepareStatement("DELETE FROM PATIENT where patient_id=?");) {
-			preparedStatement.setInt(1, patientId);
+			preparedStatement.setString(1, patientId);
 
 			preparedStatement.executeUpdate();
 			return true;
@@ -92,6 +87,35 @@ public class PatientDaoImpl implements PatientDao {
 			e.printStackTrace();
 		}
 		return false;
+	}
+
+
+	@Override
+	public Patient getPatientById(String patientId) {
+		Patient patient = null;
+		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
+				"wiley"); Statement statement = connection.createStatement();) {
+
+			ResultSet resultSet = statement.executeQuery("SELECT * FROM PATIENT where patient_id="+patientId);
+
+			while (resultSet.next()) {
+				String id = resultSet.getString("patient_id");
+				String name = resultSet.getString("name_of_patient");
+				String gender = resultSet.getString("gender");
+				int age = resultSet.getInt("age");
+				String contact = resultSet.getString("Contact_number");
+				String address = resultSet.getString("Address");
+				String dept = resultSet.getString("department");
+				
+				
+				patient= new Patient(id,name,age,gender,contact,dept,address);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return patient;
 	}
 
 }

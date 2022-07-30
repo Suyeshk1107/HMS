@@ -234,10 +234,6 @@ public class PresentationImpl implements Presentation {
 		patient.setContactNumber(str.next());
 		System.out.println("Enter patient department : ");
 		patient.setDepartment(str.next());
-		System.out.println("Set password : ");
-		patient.setPassword(str.nextLine());
-		
-//		Patient patient = new Patient(password, name, age, gender, contactNumber);
 		
 		ValidateUserServiceImpl user = new ValidateUserServiceImpl();
 		
@@ -245,10 +241,14 @@ public class PresentationImpl implements Presentation {
 		
 		if(registrationStatus) {
 			String pid = "P" + patient.getCounter(); 
+			String password;
 			patient.updateCounter();
 			System.out.println("User registered Successfully");
 			System.out.println("Please note your Id for future references");
-			System.out.println("ID: "+ pid +"\nPassword: "+ patient.getPassword());			
+			System.out.println("ID: "+ pid);	
+			System.out.println("Enter password: ");
+			password = str.nextLine();
+			// store this password & id in Login database
 		}else {
 			System.out.println("Operation failed");
 			System.out.println("Please try again.");

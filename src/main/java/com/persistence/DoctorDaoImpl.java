@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 import com.bean.Doctor;
@@ -56,7 +56,7 @@ public class DoctorDaoImpl implements DoctorDao {
 			if(resultSet.next()) {
 				
 				doctorDetails = new Doctor(
-						resultSet.getInt("doctor_id"),
+						resultSet.getString("doctor_id"),
 						resultSet.getString("name_of_doctor"),
 						resultSet.getString("specialisation"),
 						resultSet.getInt("experience"),
@@ -87,7 +87,7 @@ public class DoctorDaoImpl implements DoctorDao {
 			while(resultSet.next()) {
 				
 				Doctor doctor = new Doctor(
-						resultSet.getInt("doctor_id"),
+						resultSet.getString("doctor_id"),
 						resultSet.getString("name_of_doctor"),
 						resultSet.getString("specialisation"),
 						resultSet.getInt("experience"),
@@ -109,7 +109,7 @@ public class DoctorDaoImpl implements DoctorDao {
 	
 	
 	@Override
-	public String getEmergencyContact(int doctorId) {
+	public String getEmergencyContact(String doctorId) {
 
 		String contact = null;
 		int rows;
@@ -118,7 +118,7 @@ public class DoctorDaoImpl implements DoctorDao {
 				"wiley");
 				PreparedStatement preparedStatement = connection
 						.prepareStatement("select contact_number from DOCTOR where doctor_id=?");) {
-			preparedStatement.setInt(1, doctorId);
+			preparedStatement.setString(1, doctorId);
 
 			rows = preparedStatement.executeUpdate(); // not done
 
@@ -150,7 +150,7 @@ public class DoctorDaoImpl implements DoctorDao {
 			while(resultSet.next()) {
 				
 				Doctor doctor = new Doctor(
-						resultSet.getInt("doctor_id"),
+						resultSet.getString("doctor_id"),
 						resultSet.getString("name_of_doctor"),
 						resultSet.getString("specialisation"),
 						resultSet.getInt("experience"),
@@ -177,7 +177,7 @@ public class DoctorDaoImpl implements DoctorDao {
 				PreparedStatement preparedStatement = connection
 						.prepareStatement("INSERT INTO DOCTOR values(?,?,?,?,?,?,?,?)");) {
 
-			preparedStatement.setInt(1, doctor.getPersonId());
+			preparedStatement.setString(1, doctor.getPersonId());
 			preparedStatement.setString(2, doctor.getName());
 			preparedStatement.setString(3, doctor.getDepartment());
 			preparedStatement.setInt(4, doctor.getExperienceInYears()); 
@@ -198,13 +198,13 @@ public class DoctorDaoImpl implements DoctorDao {
 	}
 
 	@Override
-	public boolean removeDoctor(int doctorId) {
+	public boolean removeDoctor(String doctorId) {
 		int rows;
 		try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital", "root",
 				"wiley");
 				PreparedStatement preparedStatement = connection
 						.prepareStatement("DELETE FROM DOCTOR where doctor_id=?");) {
-			preparedStatement.setInt(1, doctorId);
+			preparedStatement.setString(1, doctorId);
 
 			rows = preparedStatement.executeUpdate();
 			

@@ -16,9 +16,9 @@ public interface DoctorDao {
 	
 	boolean addDoctor(Doctor doctor); //return type changed
 	
-	boolean removeDoctor(int doctorId);
-	
-	String getEmergencyContact(int doctorId);
+	boolean removeDoctor(String doctorId);
 	
 	List<Doctor> getAvailableDoctors(Date date);
+
+	String getEmergencyContact(String doctorId);
 }
