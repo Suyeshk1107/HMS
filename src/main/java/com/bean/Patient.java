@@ -8,11 +8,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Patient extends Person{
-	public Patient(String password, String name, int age, String gender, String contactNumber) {
-		// TODO Auto-generated constructor stub
+
+	private String address;
+	private static int counter = 1000;
+
+	public Patient(String personId, String Name, int age, String gender, String contactNumber, String Department,
+		String address) {
+		super(personId, Name, age, gender, contactNumber, Department);
+		this.address = address;
 	}
-	private String symptoms;
-	private String illness;
-	private String illnessDuration;
+
+	public void updateCounter() {
+		counter = getCounter() + 1;
+	}
+	
+	public int getCounter() {
+		return counter;
+	}
 
 }

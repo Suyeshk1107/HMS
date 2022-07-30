@@ -4,11 +4,11 @@ import com.bean.Doctor;
 import com.bean.Patient;
 
 public interface ValidateUserService {
-boolean isPatient(int id, String Password);
+	boolean isPatient(String id, String Password);
 	
-	boolean isDoctor(int id, String Password);
+	boolean isDoctor(String id, String Password);
 	
-	boolean isAdmin(int id, String Password);
+	boolean isAdmin(String id, String Password);
 	
 	boolean registerPatient(Patient patient);
 	

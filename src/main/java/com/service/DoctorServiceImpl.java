@@ -19,13 +19,13 @@ public class DoctorServiceImpl implements DoctorService {
 	}
 
 	@Override
-	public Map<String, List<String>> getDoctorSchedule(int doctorId) {
+	public Map<String, List<String>> getDoctorSchedule(String doctorId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean updateDoctorSchedule(int doctorId) {
+	public boolean updateDoctorSchedule(String doctorId) {
 		// TODO Auto-generated method stub
 		return false;
 	}

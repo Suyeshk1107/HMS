@@ -4,11 +4,11 @@ import java.util.Date;
 
 public interface PatientService {
 
-	boolean requestAppointment(int patientId,Date date);
-	
-	boolean cancelAppointmentRequest(int patientId);
-	
-	boolean rescheduleAppointment(int patientId, Date newDate);
-	
-	boolean getPatientProfile(int patientId); //can check only his/her patientHistory
+	boolean getPatientProfile(String id);
+
+	boolean requestAppointment(String id, Date date);
+
+	boolean cancelAppointmentRequest(String id);
+
+	boolean rescheduleAppointment(String id, Date newDate);//can check only his/her patientHistory
 }
