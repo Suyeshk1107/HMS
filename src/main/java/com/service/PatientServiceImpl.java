@@ -6,25 +6,25 @@ import java.util.Date;
 public class PatientServiceImpl implements PatientService {
 
 	@Override
-	public boolean requestAppointment(int patientId, Date date) {
+	public boolean requestAppointment(String id, Date date) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean cancelAppointmentRequest(int patientId) {
+	public boolean cancelAppointmentRequest(String id) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean rescheduleAppointment(int patientId, Date newDate) {
+	public boolean rescheduleAppointment(String id, Date newDate) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean getPatientProfile(int patientId) {
+	public boolean getPatientProfile(String id) {
 		// TODO Auto-generated method stub
 		return false;
 	}

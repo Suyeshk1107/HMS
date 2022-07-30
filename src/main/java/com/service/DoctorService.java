@@ -9,11 +9,11 @@ boolean getPatientProfile(int doctorId, int patientId);
 	
 	boolean updatePatientProfile(int doctorId, int patientId, Map<String,String> editList);
 	
-	Map<String,List<String>> getDoctorSchedule(int doctorId);
-	
-	boolean updateDoctorSchedule(int doctorId);
-	
 //	Map<String,String> getAvailableDoctors();
 	
 	boolean displayAvailableDoctors(); //doctor list + emergencyContact
+
+	Map<String, List<String>> getDoctorSchedule(String doctorId);
+
+	boolean updateDoctorSchedule(String doctorId);
 }

@@ -1,6 +1,6 @@
 package com.persistence;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 import com.bean.Doctor;
@@ -16,9 +16,9 @@ public interface DoctorDao {
 	
 	boolean addDoctor(Doctor doctor); //return type changed
 	
-	boolean removeDoctor(int doctorId);
-	
-	String getEmergencyContact(int doctorId);
+	boolean removeDoctor(String doctorId);
 	
 	List<Doctor> getAvailableDoctors(Date date);
+
+	String getEmergencyContact(String doctorId);
 }

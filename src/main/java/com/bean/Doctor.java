@@ -12,7 +12,7 @@ public class Doctor extends Person {
 	private int experienceInYears;
 	private String address;
 
-	public Doctor(int personId, String personName, String Specialization, int experience, String gender, int age, String Contact, String address){
+	public Doctor(String personId, String personName, String Specialization, int experience, String gender, int age, String Contact, String address){
 		super(personId,personName,age,gender,Contact,Specialization);
 		this.experienceInYears = experience;
 		this.address = address;
