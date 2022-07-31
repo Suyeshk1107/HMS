@@ -18,9 +18,9 @@ public interface AdminService {
 	
 	boolean registerDoctorToDatabase(Doctor doctor); // add this to menu options in admin login
 	
-	boolean removeDoctorFromDatabase(Doctor doctor);
-	
 	List<Doctor> getAvailableDoctors();
+
+	boolean removeDoctorFromDatabase(String doctorID);
 	
 //	boolean displayAvailableDoctors(); //doctor list + emergencyContact
 	//add patient, and remove patient

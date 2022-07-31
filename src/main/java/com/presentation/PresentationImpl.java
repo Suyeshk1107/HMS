@@ -205,16 +205,40 @@ public class PresentationImpl implements Presentation {
 				}
 				break;
 			
-		case 3:
-			
-			AdminServiceImpl adminService = new AdminServiceImpl();
-			
-			System.out.println("1. Generate Appointment ");
-			System.out.println("2. Cancel Appointment ");
-			System.out.println("3. add Patient");
-			System.out.println("4. Remove Patient");
-			System.out.println("5. Register Doctor To Database");
-//			System.out.println("6. Remove Doctor From Database");
+		case 3:	AdminServiceImpl adminService = new AdminServiceImpl();
+				System.out.println("1. Generate Appointment ");
+				System.out.println("2. Cancel Appointment ");
+				System.out.println("3. Add Patient");
+				System.out.println("4. Remove Patient");
+				System.out.println("5. Register Doctor To Database");
+				System.out.println("6. Remove Doctor");
+				
+				select = sc.nextInt();
+				
+				switch (select) {
+				case 1:	System.out.println("Generate Appointment");
+						break;
+				case 2:	System.out.println("Cancel Appointment");
+						break;
+				case 3:	System.out.println("Add Patient");
+						break;
+				case 4:	System.out.println("Remove Patient");
+						break;
+				case 5:	System.out.println("Register Doctor To Database");
+						break;
+				case 6: System.out.println("Enter Doctor Id to be removed: "); 
+						String doctorID = str.next();
+						if(adminService.removeDoctorFromDatabase(doctorID)) {
+							System.out.println(doctorID + " doctor ID is removed");
+						}
+						else
+							System.out.println("Unable to remove doctorID "+ doctorID);
+				 		break;
+				default:System.out.println("Wrong Input!!");
+				}
+				break;
+				
+		default:System.out.println("Wrong Input!!");
 		}
 		
 	}

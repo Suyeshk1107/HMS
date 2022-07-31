@@ -2,9 +2,12 @@ package com.service;
 
 import com.bean.Doctor;
 import com.bean.Patient;
+import com.persistence.LoginDaoImpl;
 
 public class ValidateUserServiceImpl implements ValidateUserService {
 
+	LoginDaoImpl loginDaoImpl = new LoginDaoImpl();
+	
 	@Override
 	public boolean registerPatient(Patient patient) {
 		// TODO Auto-generated method stub
@@ -31,8 +34,7 @@ public class ValidateUserServiceImpl implements ValidateUserService {
 
 	@Override
 	public boolean isAdmin(String id, String Password) {
-		// TODO Auto-generated method stub
-		return false;
+		return loginDaoImpl.validate(id, Password);
 	}
 
 }

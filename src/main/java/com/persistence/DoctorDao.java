@@ -8,9 +8,7 @@ import com.bean.Doctor;
 public interface DoctorDao {
 
 	
-	int searchDoctorId(String doctorName);
-	
-	Doctor getDoctorDetails(int doctorId);
+	String searchDoctorId(String doctorName);
 	
 	List<Doctor> getDoctorList();
 	
@@ -21,4 +19,6 @@ public interface DoctorDao {
 	List<Doctor> getAvailableDoctors(Date date);
 
 	String getEmergencyContact(String doctorId);
+
+	Doctor getDoctorDetails(String doctorId);
 }
