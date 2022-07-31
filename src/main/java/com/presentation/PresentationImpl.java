@@ -258,11 +258,11 @@ public class PresentationImpl implements Presentation {
 		patient.setContactNumber(str.next());
 		System.out.println("Enter patient department : ");
 		patient.setDepartment(str.next());
-		
+
 		ValidateUserServiceImpl user = new ValidateUserServiceImpl();
-		
+
 		boolean registrationStatus = user.registerPatient(patient);
-		
+
 		if(registrationStatus) {
 			String pid = "P" + patient.getCounter(); 
 			String password;

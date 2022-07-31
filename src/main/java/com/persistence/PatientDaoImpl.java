@@ -15,7 +15,7 @@ public class PatientDaoImpl implements PatientDao {
 
 	@Override
 	public List<Patient> getPatientList() {
-		// TODO Auto-generated method stub
+		
 		List<Patient> patientList = new ArrayList<Patient>();
 		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
 				"wiley"); Statement statement = connection.createStatement();) {
@@ -43,9 +43,9 @@ public class PatientDaoImpl implements PatientDao {
 	}
 
 
+
 	@Override
 	public boolean addPatient(Patient patient) {
-		// TODO Auto-generated method stub
 		int rows = 0;
 		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
 				"wiley");

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Doctor extends Person {
-	private String Specialization;
+//	private String Specialization;
 	private int experienceInYears;
 	private String address;
 

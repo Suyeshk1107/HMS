@@ -1,11 +1,14 @@
 package com.persistence;
 
+import com.bean.Schedule;
+
 public interface ScheduleDao {
 
 
-	boolean getDoctorSchedule(int doctorId);
+	Schedule getDoctorSchedule(int doctorId);
 	
-	boolean updateDoctorSchedule(int doctorId);
+	boolean addDoctorSchedule(Schedule schedule);
+	boolean removeDoctorSchedule(int doctorId);
 	
 
 }
