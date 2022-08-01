@@ -1,6 +1,5 @@
 package com.persistence;
 
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,16 +13,6 @@ import java.util.List;
 import com.bean.Doctor;
 
 public class DoctorDaoImpl implements DoctorDao {
-	
-//	public static void main(String[] args) {
-//	
-//		DoctorDaoImpl doctorDaoImpl = new DoctorDaoImpl();
-//		
-//		doctorDaoImpl.searchDoctorId("Dr Lipp");
-//		
-//		Doctor doctor = doctorDaoImpl.getDoctorDetails(7);
-//		System.out.println(doctor);
-//	}
 
 	private Connection connection;
 	private PreparedStatement preparedStatement;

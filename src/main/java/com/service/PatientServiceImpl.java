@@ -3,11 +3,15 @@ package com.service;
 //import java.sql.Date;
 import java.util.Date;
 
+import com.persistence.AppointmentDaoImpl;
+
 public class PatientServiceImpl implements PatientService {
 
+	AppointmentDaoImpl appointmentDaoImpl = new AppointmentDaoImpl();
+	
 	@Override
 	public boolean requestAppointment(String id, Date date) {
-		// TODO Auto-generated method stub
+		appointmentDaoImpl.appointment(id, date.toString());
 		return false;
 	}
 

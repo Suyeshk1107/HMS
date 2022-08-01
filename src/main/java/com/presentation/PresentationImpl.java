@@ -1,10 +1,11 @@
 package com.presentation;
 
 import java.sql.Date;
-import java.time.LocalDate;
+import java.sql.Time;
 import java.util.Scanner;
 
 import com.bean.Patient;
+import com.bean.Schedule;
 import com.service.AdminServiceImpl;
 import com.service.DoctorServiceImpl;
 import com.service.PatientServiceImpl;
@@ -194,9 +195,16 @@ public class PresentationImpl implements Presentation {
 						break;
 					
 				case 4: 
-//						System.out.println("Enter new date of appointment");
-//						date = new Date(sc.nextLong());
-						doctorService.updateDoctorSchedule(id); //improvisation required
+						System.out.println("Enter Schedule details to be updated:");
+						
+						String doctor_id = str.next();  
+						String name_of_doctor= str.nextLine(); 
+						String available_day= str.next(); 
+						Time slot_start = Time.valueOf(str.next()); 
+						Time slot_end = Time.valueOf(str.next());
+
+						
+						doctorService.updateDoctorSchedule(id, new Schedule(doctor_id,name_of_doctor,available_day,slot_start,slot_end));
 						break;
 				
 				case 5: System.exit(0);

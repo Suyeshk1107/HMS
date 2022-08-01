@@ -13,14 +13,24 @@ import com.bean.Patient;
 
 public class PatientDaoImpl implements PatientDao {
 
+	private Connection connection;
+	private PreparedStatement preparedStatement;
+	private Statement statement;
+	private ResultSet resultSet;
+	
+	Connection connectDB() throws SQLException {
+		return DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital", "root", "wiley");
+	}
+	
 	@Override
 	public List<Patient> getPatientList() {
 		
 		List<Patient> patientList = new ArrayList<Patient>();
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
-				"wiley"); Statement statement = connection.createStatement();) {
-
-			ResultSet resultSet = statement.executeQuery("SELECT * FROM PATIENT");
+		
+		try{
+			this.connection = connectDB();
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("SELECT * FROM PATIENT");
 
 			while (resultSet.next()) {
 				String id = resultSet.getString("patient_id");
@@ -47,11 +57,10 @@ public class PatientDaoImpl implements PatientDao {
 	@Override
 	public boolean addPatient(Patient patient) {
 		int rows = 0;
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
-				"wiley");
-				PreparedStatement preparedStatement = connection
-						.prepareStatement("INSERT INTO PATIENT values(?,?,?,?,?,?,?)");) {
-
+		try{
+			this.connection = connectDB();
+			preparedStatement = connection.prepareStatement("INSERT INTO PATIENT values(?,?,?,?,?,?,?)");
+			
 			preparedStatement.setString(1, patient.getPersonId());
 			preparedStatement.setString(2, patient.getName());
 			preparedStatement.setString(3, patient.getGender());
@@ -67,17 +76,15 @@ public class PatientDaoImpl implements PatientDao {
 		}
 		if (rows>0)
 			return true;
-		else
-			return false;
+		return false;
 	}
 
 	@Override
 	public boolean removePatient(String patientId) {
 		// TODO Auto-generated method stub
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
-				"wiley");
-				PreparedStatement preparedStatement = connection
-						.prepareStatement("DELETE FROM PATIENT where patient_id=?");) {
+		try{
+			this.connection = connectDB();
+			preparedStatement = connection.prepareStatement("DELETE FROM PATIENT where patient_id=?");
 			preparedStatement.setString(1, patientId);
 
 			preparedStatement.executeUpdate();
@@ -93,10 +100,10 @@ public class PatientDaoImpl implements PatientDao {
 	@Override
 	public Patient getPatientById(String patientId) {
 		Patient patient = null;
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
-				"wiley"); Statement statement = connection.createStatement();) {
-
-			ResultSet resultSet = statement.executeQuery("SELECT * FROM PATIENT where patient_id="+patientId);
+		try{
+			this.connection = connectDB();
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("SELECT * FROM PATIENT where patient_id="+patientId);
 
 			while (resultSet.next()) {
 				String id = resultSet.getString("patient_id");

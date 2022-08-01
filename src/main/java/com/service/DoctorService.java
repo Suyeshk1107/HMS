@@ -1,19 +1,26 @@
 package com.service;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.bean.Doctor;
+import com.bean.Patient;
+import com.bean.Schedule;
+
 public interface DoctorService {
-
-boolean getPatientProfile(int doctorId, int patientId);
 	
-	boolean updatePatientProfile(int doctorId, int patientId, Map<String,String> editList);
+	boolean updatePatientProfile(String doctorId, String patientId, Map<String,String> editList);
 	
-//	Map<String,String> getAvailableDoctors();
-	
-	boolean displayAvailableDoctors(); //doctor list + emergencyContact
+	List<Doctor> getAvailableDoctors(Date date);
 
-	Map<String, List<String>> getDoctorSchedule(String doctorId);
+	Schedule getDoctorSchedule(String doctorId);
 
-	boolean updateDoctorSchedule(String doctorId);
+//	boolean getPatientProfile(String doctorId, String patientId);
+
+	Patient getPatientProfile(String patientId);
+
+	void displayAvailableDoctors(Date date);
+
+	boolean updateDoctorSchedule(String doctorId, Schedule schedule);
 }

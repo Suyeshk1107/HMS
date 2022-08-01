@@ -1,7 +1,5 @@
 package com.persistence;
 
-import com.bean.Doctor;
-import com.bean.Patient;
 
 public interface LoginDao {
 

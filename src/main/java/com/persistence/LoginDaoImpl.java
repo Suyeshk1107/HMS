@@ -5,14 +5,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 
 public class LoginDaoImpl implements LoginDao {
 
 	private Connection connection;
 	private PreparedStatement preparedStatement;
-	private Statement statement;
 	private ResultSet resultSet;
 	
 	Connection connectDB() throws SQLException {
@@ -28,7 +26,7 @@ public class LoginDaoImpl implements LoginDao {
 
 	@Override
 	public boolean validate(String id, String password) {
-		String pssd = null;
+		String pssd = "";
 		
 		try {
 			this.connection = connectDB();

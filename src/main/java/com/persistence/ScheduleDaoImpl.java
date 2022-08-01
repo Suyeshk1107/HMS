@@ -11,21 +11,27 @@ import com.bean.Schedule;
 
 public class ScheduleDaoImpl implements ScheduleDao {
 
+	private Connection connection;
+	private PreparedStatement preparedStatement;
+	private ResultSet resultSet;
+	
+	Connection connectDB() throws SQLException {
+		return DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital", "root", "wiley");
+	}
+	
 	@Override
-	public Schedule getDoctorSchedule(int doctorId) {
-		// TODO Auto-generated method stub
+	public Schedule getDoctorSchedule(String doctorId) {
+		
 		Schedule schedule = null;
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
-				"wiley");
-				PreparedStatement preparedStatement = connection
-						.prepareStatement("SELECT * FROM regular_schedule where doctor_id=?");) {
+		try{
+			this.connection = connectDB();
+			preparedStatement = connection.prepareStatement("SELECT * FROM regular_schedule where doctor_id=?");
+			preparedStatement.setString(1, doctorId);
 
-			preparedStatement.setInt(1, doctorId);
-
-			ResultSet resultSet = preparedStatement.executeQuery();
+			resultSet = preparedStatement.executeQuery();
 
 			if (resultSet.next()) {
-				int id = resultSet.getInt("doctor_id");
+				String id = resultSet.getString("doctor_id");
 				String name = resultSet.getString("name_of_doctor");
 				String day = resultSet.getString("available_day");
 				Time slot_start = resultSet.getTime("slot_start");
@@ -44,14 +50,12 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
 	@Override
 	public boolean addDoctorSchedule(Schedule schedule) {
-		// TODO Auto-generated method stub
 		int rows = 0;
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
-				"wiley");
-				PreparedStatement preparedStatement = connection
-						.prepareStatement("INSERT INTO slot_start values(?,?,?,?,?)");) {
+		try{
+			this.connection = connectDB();
+			preparedStatement = connection.prepareStatement("INSERT INTO slot_start values(?,?,?,?,?)");
 
-			preparedStatement.setInt(1, schedule.getDoctor_id());
+			preparedStatement.setString(1, schedule.getDoctor_id());
 			preparedStatement.setString(2, schedule.getName_of_doctor());
 			preparedStatement.setString(3, schedule.getAvailable_day());
 			preparedStatement.setTime(4, schedule.getSlot_start());
@@ -65,20 +69,18 @@ public class ScheduleDaoImpl implements ScheduleDao {
 		}
 		if (rows>0)
 			return true;
-		else
-			return false;
+		return false;
 	}
 
 	
 
 	@Override
-	public boolean removeDoctorSchedule(int doctorId) {
+	public boolean removeDoctorSchedule(String doctorId) {
 		// TODO Auto-generated method stub
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
-				"wiley");
-				PreparedStatement preparedStatement = connection
-						.prepareStatement("DELETE FROM SCHEDULE where doctor_id=?");) {
-			preparedStatement.setInt(1, doctorId);
+		try{
+			this.connection = connectDB();
+			preparedStatement = connection.prepareStatement("DELETE FROM SCHEDULE where doctor_id=?");
+			preparedStatement.setString(1, doctorId);
 
 			preparedStatement.executeUpdate();
 			return true;
