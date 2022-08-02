@@ -44,6 +44,7 @@ public class PatientDaoImpl implements PatientDao {
 				
 				patientList.add(new Patient(id,name,age,gender,contact,dept,address));
 			}
+			return patientList;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -102,8 +103,10 @@ public class PatientDaoImpl implements PatientDao {
 		Patient patient = null;
 		try{
 			this.connection = connectDB();
-			statement = connection.createStatement();
-			resultSet = statement.executeQuery("SELECT * FROM PATIENT where patient_id="+patientId);
+			preparedStatement = connection.prepareStatement("SELECT * FROM PATIENT where patient_id=?");
+			preparedStatement.setString(1, patientId);
+			
+			resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
 				String id = resultSet.getString("patient_id");
@@ -116,6 +119,7 @@ public class PatientDaoImpl implements PatientDao {
 				
 				
 				patient= new Patient(id,name,age,gender,contact,dept,address);
+				return patient;
 			}
 
 		} catch (SQLException e) {

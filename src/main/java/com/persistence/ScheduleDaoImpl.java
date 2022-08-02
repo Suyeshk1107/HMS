@@ -53,7 +53,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
 		int rows = 0;
 		try{
 			this.connection = connectDB();
-			preparedStatement = connection.prepareStatement("INSERT INTO slot_start values(?,?,?,?,?)");
+			preparedStatement = connection.prepareStatement("INSERT INTO regular_schedule values(?,?,?,?,?)");
 
 			preparedStatement.setString(1, schedule.getDoctor_id());
 			preparedStatement.setString(2, schedule.getName_of_doctor());
@@ -79,7 +79,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
 		// TODO Auto-generated method stub
 		try{
 			this.connection = connectDB();
-			preparedStatement = connection.prepareStatement("DELETE FROM SCHEDULE where doctor_id=?");
+			preparedStatement = connection.prepareStatement("DELETE FROM REGULAR_SCHEDULE where doctor_id=?");
 			preparedStatement.setString(1, doctorId);
 
 			preparedStatement.executeUpdate();

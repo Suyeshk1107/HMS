@@ -11,6 +11,7 @@ public class Doctor extends Person {
 
 	private int experienceInYears;
 	private String address;
+	private static int counter = 1010;
 
 	public Doctor(String personId, String personName, String Specialization, int experience, String gender, int age, String Contact, String address){
 		super(personId,personName,age,gender,Contact,Specialization);
@@ -26,6 +27,12 @@ public class Doctor extends Person {
 				+ ", getContactNumber()=" + getContactNumber() + ", getDepartment()=" + getDepartment() + "]";
 	}
 
+	public void updateCounter() {
+		counter = getCounter() + 1;
+	}
 	
+	public int getCounter() {
+		return counter;
+	}
 	
 }

@@ -56,7 +56,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	
 	public String checkSlot(String slot_to_check, String d_id, Date date) {
 		LocalTime new_slot = null;
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
+		try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital", "root",
 				"wiley");
 				PreparedStatement preparedStatement = connection
 						.prepareStatement("select slot from appointments where doctor_id = ? AND date_of_appointment = ?");) {
@@ -92,7 +92,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	
 	
 	public void storeAppointment(String p_id, String p_name, String new_slot, Date date, String d_id, String d_name, String dept) {
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
+		try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital", "root",
 				"wiley");
 				PreparedStatement preparedStatement = connection
 						.prepareStatement("INSERT INTO Appointments values(?,?,?,?,?,?,?)");) {

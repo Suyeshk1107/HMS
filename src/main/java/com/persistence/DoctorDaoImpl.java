@@ -18,6 +18,7 @@ public class DoctorDaoImpl implements DoctorDao {
 	private PreparedStatement preparedStatement;
 	private Statement statement;
 	private ResultSet resultSet;
+	LoginDaoImpl loginDaoImpl = new LoginDaoImpl();
 	
 	Connection connectDB() throws SQLException {
 		return DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital", "root", "wiley");
@@ -178,7 +179,8 @@ public class DoctorDaoImpl implements DoctorDao {
 		try{
 			this.connection = connectDB();
 			preparedStatement = connection.prepareStatement("INSERT INTO DOCTOR values(?,?,?,?,?,?,?,?)");
-
+			
+			doctor.setPersonId("D" + doctor.getCounter());
 			preparedStatement.setString(1, doctor.getPersonId());
 			preparedStatement.setString(2, doctor.getName());
 			preparedStatement.setString(3, doctor.getDepartment());
@@ -196,6 +198,13 @@ public class DoctorDaoImpl implements DoctorDao {
 		}
 		if(rows < 0)
 			return false;
+		doctor.updateCounter();
+		
+		if(loginDaoImpl.registerUser(doctor.getPersonId(), doctor.getPersonId()))
+			System.out.println("Id & Password Created successfully");
+		else
+			System.out.println("Credentials not generated");
+		
 		return true;
 	}
 
