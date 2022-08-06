@@ -13,9 +13,10 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	ArrayList<String> list = new ArrayList<>();
 	
 	public void appointment(String patient_id, String new_date) {
-		
-
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital", "root",
+//		127.0.0.1:3306
+//		localhost:3306
+		LocalTime end_slot = null;
+		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
 				"wiley");
 				PreparedStatement preparedStatement = connection
 						.prepareStatement("call book_appointment(?)");) {
@@ -36,8 +37,10 @@ public class AppointmentDaoImpl implements AppointmentDao {
 				Date date = Date.valueOf(new_date);
 				String new_slot = checkSlot(slot, d_id, date);
 		
-				int a = new_slot.compareTo(slot_end);
-				if(a == 0) {
+				end_slot = LocalTime.parse(slot_end);
+				int a = new_slot.compareTo(end_slot.toString());
+				
+				if(a != 0) {
 					storeAppointment(p_id, p_name, new_slot, date, d_id, d_name, dept);
 					System.out.println(p_id+" "+p_name+" "+new_slot+" "+date+" "+d_id+" "+d_name+" "+dept);
 				}
@@ -45,6 +48,17 @@ public class AppointmentDaoImpl implements AppointmentDao {
 					System.out.println("No slot present for the date :"+date);
 				
 			}
+				
+				
+//				int a = new_slot.compareTo(slot_end);
+//				if(a == 0) {
+//					storeAppointment(p_id, p_name, new_slot, date, d_id, d_name, dept);
+//					System.out.println(p_id+" "+p_name+" "+new_slot+" "+date+" "+d_id+" "+d_name+" "+dept);
+//				}
+//				else
+//					System.out.println("No slot present for the date :"+date);
+//				
+//			}
 			
 			
 
@@ -73,13 +87,11 @@ public class AppointmentDaoImpl implements AppointmentDao {
 				
 			}if(list.isEmpty()) {
 				return slot_to_check;}
-			for(String e:list) {
-				System.out.println(e);
-			}
+			
 			String last_slot = list.get(list.size()-1);
 			new_slot = LocalTime.parse(last_slot);
 			new_slot = new_slot.plusMinutes(20);
-			System.out.println(new_slot);
+			
 			
 			
 
