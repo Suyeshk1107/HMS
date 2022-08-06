@@ -6,8 +6,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
+
+import com.bean.PrevSlots;
 
 public class AppointmentDaoImpl implements AppointmentDao {
 	ArrayList<String> list = new ArrayList<>();
@@ -70,7 +74,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	
 	public String checkSlot(String slot_to_check, String d_id, Date date) {
 		LocalTime new_slot = null;
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital", "root",
+		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
 				"wiley");
 				PreparedStatement preparedStatement = connection
 						.prepareStatement("select slot from appointments where doctor_id = ? AND date_of_appointment = ?");) {
@@ -126,6 +130,35 @@ public class AppointmentDaoImpl implements AppointmentDao {
 
 		
 
+	}
+	List<PrevSlots> prevSlots = new ArrayList<>();
+	public List<PrevSlots> prevAppointments(String dId) {
+		
+		try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital", "root",
+				"wiley");
+				PreparedStatement preparedStatement = connection
+						.prepareStatement("select slot, date_of_appointment from appointments where doctor_id = ?");) {
+
+			preparedStatement.setString(1, dId);
+	
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+			
+			while(resultSet.next()) {
+				Time slot = resultSet.getTime("slot");
+				Date date = resultSet.getDate("date_of_appointment");
+				prevSlots.add(new PrevSlots(slot, date));
+			}
+
+			
+			
+			
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return prevSlots;
+		
 	}
 	
 	

@@ -2,13 +2,16 @@ package com.presentation;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.List;
 import java.util.Scanner;
 
 import com.bean.Doctor;
 import com.bean.Patient;
+import com.bean.PrevSlots;
 import com.bean.Schedule;
 import com.persistence.LoginDaoImpl;
 import com.service.AdminServiceImpl;
+import com.service.AppointmentServiceImpl;
 import com.service.DoctorServiceImpl;
 import com.service.PatientServiceImpl;
 import com.service.ValidateUserServiceImpl;
@@ -156,33 +159,40 @@ public class PresentationImpl implements Presentation {
 		switch(choice) {
 		
 		case 1:	PatientServiceImpl patientService = new PatientServiceImpl();
+				AppointmentServiceImpl appointmentServiceImpl = new AppointmentServiceImpl();
 			
 				System.out.println("1. User profile(Patient)");
-				System.out.println("2. Request Appointment");
-				System.out.println("3. Cancel Appointment Request");
-				System.out.println("4. Reschedule appointment ");
-				System.out.println("5. Exit.");
+				System.out.println("2. Show Appointment Slots");
+				System.out.println("3. Request Appointment");
+				System.out.println("4. Cancel Appointment Request");
+				System.out.println("5. Reschedule appointment ");
+				System.out.println("6. Exit.");
 				
 				select = sc.nextInt();
 				
 				switch (select) {
 				case 1:	patientService.getPatientProfile(id);
 						break;
-				
-				case 2: System.out.println("Enter date of appointment(yyyy-mm-dd)");
+				case 2: System.out.println("Enter Doctor Id : ");
+						List<PrevSlots> prevSlots =  appointmentServiceImpl.prevSlots(str.next());
+						for(PrevSlots e:prevSlots) {
+							System.out.println(e);
+						}
+						break;
+				case 3: System.out.println("Enter date of appointment(yyyy-mm-dd)");
 						date = Date.valueOf(str.next());
 						patientService.requestAppointment(id, date); //LocalDate.now() as default
 						break;
 						
-				case 3: patientService.cancelAppointmentRequest(id); // maybe need to add appointment id and list of appointments
+				case 4: patientService.cancelAppointmentRequest(id); // maybe need to add appointment id and list of appointments
 						break; //may require date for more appointments
 					
-				case 4: System.out.println("Enter new date of appointment");
+				case 5: System.out.println("Enter new date of appointment");
 						date = Date.valueOf(str.next());
 						patientService.rescheduleAppointment(id, date); //improvisation required
 						break;
 				
-				case 5: System.exit(0);
+				case 6: System.exit(0);
 				
 				default: System.out.print("Wrong Input!!");
 				}
