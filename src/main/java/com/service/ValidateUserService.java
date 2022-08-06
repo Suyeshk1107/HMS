@@ -4,6 +4,8 @@ import com.bean.Doctor;
 import com.bean.Patient;
 
 public interface ValidateUserService {
+	boolean registerUser(String id, String Password);
+	
 	boolean isPatient(String id, String Password);
 	
 	boolean isDoctor(String id, String Password);

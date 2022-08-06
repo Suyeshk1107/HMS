@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 
 public class Schedule {
 	
-	private int doctor_id;  
+	private String doctor_id;  
 	private String name_of_doctor; 
 	private String available_day; 
 	private Time slot_start; 

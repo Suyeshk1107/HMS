@@ -3,30 +3,34 @@ package com.service;
 //import java.sql.Date;
 import java.util.Date;
 
+import com.bean.Patient;
+import com.persistence.AppointmentDaoImpl;
+import com.persistence.PatientDaoImpl;
+
 public class PatientServiceImpl implements PatientService {
 
+	AppointmentDaoImpl appointmentDaoImpl = new AppointmentDaoImpl();
+	PatientDaoImpl patientDaoImpl = new PatientDaoImpl();
+	
 	@Override
-	public boolean requestAppointment(String id, Date date) {
-		// TODO Auto-generated method stub
-		return false;
+	public void requestAppointment(String id, Date date) {
+		appointmentDaoImpl.appointment(id, date.toString());
 	}
 
 	@Override
-	public boolean cancelAppointmentRequest(String id) {
-		// TODO Auto-generated method stub
-		return false;
+	public void cancelAppointmentRequest(String id) {
+
 	}
 
 	@Override
-	public boolean rescheduleAppointment(String id, Date newDate) {
-		// TODO Auto-generated method stub
-		return false;
+	public void rescheduleAppointment(String id, Date newDate) {
+		
 	}
 
 	@Override
-	public boolean getPatientProfile(String id) {
-		// TODO Auto-generated method stub
-		return false;
+	public void getPatientProfile(String id) {
+		Patient patient = patientDaoImpl.getPatientById(id);
+		System.out.println(patient.toString());
 	}
 
 }

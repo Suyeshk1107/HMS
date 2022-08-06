@@ -1,6 +1,5 @@
 package com.persistence;
 
-import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,26 +14,33 @@ import com.bean.Doctor;
 
 public class DoctorDaoImpl implements DoctorDao {
 
+	private Connection connection;
+	private PreparedStatement preparedStatement;
+	private Statement statement;
+	private ResultSet resultSet;
+	LoginDaoImpl loginDaoImpl = new LoginDaoImpl();
+	
+	Connection connectDB() throws SQLException {
+		return DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital", "root", "wiley");
+	}
+	
 	@Override
-	public int searchDoctorId(String doctorName) {
+	public String searchDoctorId(String doctorName) {
+		String id = null;
 		
-		ResultSet resultSet;
-		int id = 0;
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
-				"wiley");
-				PreparedStatement preparedStatement = connection
-						.prepareStatement("select doctor_id from DOCTOR where name_of_doctor=?");) {
+		try {
+			this.connection = connectDB();
+			preparedStatement = connection.prepareStatement("select doctor_id from DOCTOR where name_of_doctor=?");
+			
 			preparedStatement.setString(1, doctorName);
-
 			resultSet = preparedStatement.executeQuery(); 
 			
 			if(resultSet.next()) {
-				id = resultSet.getInt("doctor_id");
+				id = resultSet.getString("doctor_id");
 			};
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			id = -1;
 		}
 		return id;
 	
@@ -42,17 +48,17 @@ public class DoctorDaoImpl implements DoctorDao {
 	
 
 	@Override
-	public Doctor getDoctorDetails(int doctorId) {
+	public Doctor getDoctorDetails(String doctorId) {
 		
-		ResultSet resultSet;
 		Doctor doctorDetails = null;
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
-				"wiley");
-				PreparedStatement preparedStatement = connection
-						.prepareStatement("select * from DOCTOR where doctor_id=?");) {
-			preparedStatement.setInt(1, doctorId);
-
-			resultSet = preparedStatement.executeQuery(); 
+		
+		try{
+			this.connection = connectDB();
+			preparedStatement = connection.prepareStatement("select * from DOCTOR where doctor_id=?");
+			
+			preparedStatement.setString(1, doctorId);
+			resultSet = preparedStatement.executeQuery();
+			
 			if(resultSet.next()) {
 				
 				doctorDetails = new Doctor(
@@ -70,20 +76,19 @@ public class DoctorDaoImpl implements DoctorDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return doctorDetails;
-		
-		
+		return doctorDetails;	
 	}
 
 	@Override
 	public List<Doctor> getDoctorList() {
 
 		List<Doctor> doctorList = new ArrayList<>();
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
-				"wiley");
-				Statement statement = connection.createStatement();) {
+		
+		try{
+			this.connection = connectDB();
+			statement = connection.createStatement();
 
-			ResultSet resultSet = statement.executeQuery("SELECT * FROM PATIENT");
+			resultSet = statement.executeQuery("SELECT * FROM PATIENT");
 			while(resultSet.next()) {
 				
 				Doctor doctor = new Doctor(
@@ -109,43 +114,42 @@ public class DoctorDaoImpl implements DoctorDao {
 	
 	
 	@Override
+	
 	public String getEmergencyContact(String doctorId) {
 
 		String contact = null;
-		int rows;
-		List<Doctor> doctorList = null;
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
-				"wiley");
-				PreparedStatement preparedStatement = connection
-						.prepareStatement("select contact_number from DOCTOR where doctor_id=?");) {
+		
+		try{
+			this.connection = connectDB();		
+			preparedStatement = connection.prepareStatement("select contact_number from DOCTOR where doctor_id=?");
 			preparedStatement.setString(1, doctorId);
-
-			rows = preparedStatement.executeUpdate(); // not done
+			resultSet = preparedStatement.executeQuery();
+			
+			while(resultSet.next()) {
+				resultSet.getString(contact);
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			rows = -1;
 		}
 		return contact;
 		
 	}
 
-	//
 	@Override 
 	public List<Doctor> getAvailableDoctors(Date date) { 
 
-		
 		List<Doctor> getAvailableDoctors = new ArrayList<>();
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
-				"wiley");
-				PreparedStatement preparedStatement = connection
-						.prepareStatement("select * from DOCTOR where available_day = ?");) { // 
+		
+		try{
+			this.connection = connectDB();
+			preparedStatement = connection.prepareStatement("select * from DOCTOR where available_day = ?");
 
 			int day = date.getDay();
 			
 			preparedStatement.setInt(1, day);
 
-			ResultSet resultSet = preparedStatement.executeQuery();
+			resultSet = preparedStatement.executeQuery();
 			
 			while(resultSet.next()) {
 				
@@ -170,13 +174,13 @@ public class DoctorDaoImpl implements DoctorDao {
 	
 	@Override
 	public boolean addDoctor(Doctor doctor) {
-		// TODO Auto-generated method stub
+		
 		int rows = 0;
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hospital", "root",
-				"wiley");
-				PreparedStatement preparedStatement = connection
-						.prepareStatement("INSERT INTO DOCTOR values(?,?,?,?,?,?,?,?)");) {
-
+		try{
+			this.connection = connectDB();
+			preparedStatement = connection.prepareStatement("INSERT INTO DOCTOR values(?,?,?,?,?,?,?,?)");
+			
+			doctor.setPersonId("D" + doctor.getCounter());
 			preparedStatement.setString(1, doctor.getPersonId());
 			preparedStatement.setString(2, doctor.getName());
 			preparedStatement.setString(3, doctor.getDepartment());
@@ -187,23 +191,30 @@ public class DoctorDaoImpl implements DoctorDao {
 			preparedStatement.setString(8, doctor.getAddress());
 
 			rows = preparedStatement.executeUpdate();
-			
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
-
+		if(rows < 0)
+			return false;
+		doctor.updateCounter();
+		
+		if(loginDaoImpl.registerUser(doctor.getPersonId(), doctor.getPersonId()))
+			System.out.println("Id & Password Created successfully");
+		else
+			System.out.println("Credentials not generated");
+		
 		return true;
 	}
 
 	@Override
 	public boolean removeDoctor(String doctorId) {
-		int rows;
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital", "root",
-				"wiley");
-				PreparedStatement preparedStatement = connection
-						.prepareStatement("DELETE FROM DOCTOR where doctor_id=?");) {
+		int rows = 0;
+		
+		try{
+			this.connection = connectDB();
+			preparedStatement = connection.prepareStatement("DELETE FROM DOCTOR where doctor_id=?");
 			preparedStatement.setString(1, doctorId);
 
 			rows = preparedStatement.executeUpdate();
@@ -212,9 +223,8 @@ public class DoctorDaoImpl implements DoctorDao {
 			e.printStackTrace();
 			return false;
 		}
-		if(rows<1) {
+		if(rows < 0) 
 			return false;
-		}
 		return true;
 	}
 

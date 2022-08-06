@@ -26,4 +26,11 @@ public class Patient extends Person{
 		return counter;
 	}
 
+	@Override
+	public String toString() {
+		return "Patient [PersonId=" + getPersonId() + ", Name=" + getName()
+				+ ", Age=" + getAge() + ", Gender=" + getGender() + ", ContactNumber="
+				+ getContactNumber() + ", Department=" + getDepartment() + ", address=" + getAddress() +"]";
+	}
+
 }
