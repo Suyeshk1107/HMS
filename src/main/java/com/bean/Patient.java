@@ -10,16 +10,18 @@ import lombok.NoArgsConstructor;
 public class Patient extends Person{
 
 	private String address;
-	private static int counter = 1000;
+	private int counter;
+	private String symptoms;
 
-	public Patient(String personId, String Name, int age, String gender, String contactNumber, String Department,
+	public Patient(String personId, String Name, int age, String gender, String contactNumber, String symptoms,
 		String address) {
-		super(personId, Name, age, gender, contactNumber, Department);
+		super(personId, Name, age, gender, contactNumber, null);
 		this.address = address;
+		this.symptoms = symptoms;
 	}
 
-	public void updateCounter() {
-		counter = getCounter() + 1;
+	public void setCounter(int counter) {
+		this.counter = counter + 1;
 	}
 	
 	public int getCounter() {
@@ -30,7 +32,7 @@ public class Patient extends Person{
 	public String toString() {
 		return "Patient [PersonId=" + getPersonId() + ", Name=" + getName()
 				+ ", Age=" + getAge() + ", Gender=" + getGender() + ", ContactNumber="
-				+ getContactNumber() + ", Department=" + getDepartment() + ", address=" + getAddress() +"]";
+				+ getContactNumber() + ", Symptoms=" + getSymptoms() + ", address=" + getAddress() +"]";
 	}
 
 }

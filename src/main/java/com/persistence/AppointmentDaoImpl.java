@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AppointmentDaoImpl implements AppointmentDao {
 	ArrayList<String> list = new ArrayList<>();
@@ -114,6 +115,32 @@ public class AppointmentDaoImpl implements AppointmentDao {
 
 		
 
+	}
+	
+	public List<String> getAllAppointments(String pid) {
+		
+		List<String> appointments = new ArrayList<>();
+		try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital", "root",
+				"wiley");
+				PreparedStatement preparedStatement = connection
+						.prepareStatement("select * from Appointments where patient_id=?");) {
+
+			preparedStatement.setString(1, pid);
+
+			ResultSet resultSet = preparedStatement.executeQuery();
+			
+			while(resultSet.next()) {
+				appointments.add("[AppointmentID: "+resultSet.getInt("appointment_id")+","
+						+ " Slot: "+ resultSet.getTime(3) +", Date of Appointment: "+ resultSet.getDate(4) 
+						+", DoctorID:" + resultSet.getString(5) + ", Doctor Name: "+ resultSet.getString(6) +"]");		
+			}
+			
+			
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return appointments;
 	}
 	
 	

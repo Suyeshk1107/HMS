@@ -180,6 +180,8 @@ public class DoctorDaoImpl implements DoctorDao {
 			this.connection = connectDB();
 			preparedStatement = connection.prepareStatement("INSERT INTO DOCTOR values(?,?,?,?,?,?,?,?)");
 			
+			doctor.setCounter(getLastDId());
+			
 			doctor.setPersonId("D" + doctor.getCounter());
 			preparedStatement.setString(1, doctor.getPersonId());
 			preparedStatement.setString(2, doctor.getName());
@@ -198,7 +200,6 @@ public class DoctorDaoImpl implements DoctorDao {
 		}
 		if(rows < 0)
 			return false;
-		doctor.updateCounter();
 		
 		if(loginDaoImpl.registerUser(doctor.getPersonId(), doctor.getPersonId()))
 			System.out.println("Id & Password Created successfully");
@@ -226,6 +227,29 @@ public class DoctorDaoImpl implements DoctorDao {
 		if(rows < 0) 
 			return false;
 		return true;
+	}
+	
+	@Override
+	public int getLastDId() {
+		int counter = 0;
+		try{
+			this.connection = connectDB();
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("SELECT doctor_id FROM DOCTOR order by doctor_id desc");
+
+			if (resultSet.next()) {
+				String id = resultSet.getString("doctor_id");	
+				System.out.println(id);
+				counter = Integer.parseInt(id.substring(1));
+			}
+			else {
+				counter = 1000;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return counter;
 	}
 
 }

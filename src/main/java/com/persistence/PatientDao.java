@@ -14,5 +14,7 @@ public interface PatientDao {
 	boolean removePatient(String patientId);
 
 	Patient getPatientById(String patientId);
+
+	int getLastPId();
 		
 }

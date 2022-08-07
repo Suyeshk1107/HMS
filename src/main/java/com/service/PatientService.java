@@ -1,6 +1,7 @@
 package com.service;
 
 import java.util.Date;
+import java.util.List;
 
 public interface PatientService {
 
@@ -8,7 +9,11 @@ public interface PatientService {
 
 	void requestAppointment(String id, Date date);
 
-	void cancelAppointmentRequest(String id);
+	int getLastPatientId();
 
-	void rescheduleAppointment(String id, Date newDate);//can check only his/her patientHistory
+	List<String> getMyAppointments(String pid);
+
+	void cancelAppointmentRequest(int i);
+
+	void rescheduleAppointment(int aid, Date newDate);
 }

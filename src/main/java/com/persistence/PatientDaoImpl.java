@@ -1,6 +1,7 @@
 package com.persistence;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,6 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bean.Doctor;
 import com.bean.Patient;
 
 public class PatientDaoImpl implements PatientDao {
@@ -128,5 +130,26 @@ public class PatientDaoImpl implements PatientDao {
 
 		return patient;
 	}
+	
+	@Override
+	public int getLastPId() {
+		int counter = 0;
+		try{
+			this.connection = connectDB();
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("SELECT patient_id FROM PATIENT order by patient_id desc limit 1");
 
+			if (resultSet.next()) {
+				String id = resultSet.getString("patient_id");				
+				counter = Integer.parseInt(id.substring(1));
+			}
+			else {
+				counter = 1000;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return counter;
+	}
 }

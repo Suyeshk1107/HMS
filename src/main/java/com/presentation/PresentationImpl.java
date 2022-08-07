@@ -2,6 +2,8 @@ package com.presentation;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Scanner;
 
 import com.bean.Doctor;
@@ -15,9 +17,9 @@ import com.service.ValidateUserServiceImpl;
 
 public class PresentationImpl implements Presentation {
 
-	Scanner sc = new Scanner(System.in);
-	Scanner str = new Scanner(System.in);
-	Scanner sl = new Scanner(System.in);
+	Scanner sc = new Scanner(System.in);		//its is for integer
+	Scanner str = new Scanner(System.in);		//for string -> next()
+	Scanner sl = new Scanner(System.in);		//for lines -> nextLine()
 	
 	@Override
 	public void showMenu() {
@@ -145,7 +147,7 @@ public class PresentationImpl implements Presentation {
 		System.out.println("Thanks for visiting HMS!!");
 	}
 	
-//======================================================>
+
 	public void postLogin(int choice,String id) {
 		
 		int select;
@@ -156,6 +158,7 @@ public class PresentationImpl implements Presentation {
 		switch(choice) {
 		
 		case 1:	PatientServiceImpl patientService = new PatientServiceImpl();
+				DoctorServiceImpl doctorServiceImpl = new DoctorServiceImpl();
 			
 				System.out.println("1. User profile(Patient)");
 				System.out.println("2. Request Appointment");
@@ -169,17 +172,48 @@ public class PresentationImpl implements Presentation {
 				case 1:	patientService.getPatientProfile(id);
 						break;
 				
-				case 2: System.out.println("Enter date of appointment(yyyy-mm-dd)");
+				case 2: System.out.println("Available doctors:");
+				 		List<Doctor> docs = doctorServiceImpl.getAvailableDoctors(Date.valueOf(LocalDate.now()));
+				 		for(Doctor doc: docs) {
+				 			System.out.println(doc.toString());
+				 		}
+				 		System.out.println("Please select doctor id: ");
+				 		String doc_id = str.next();
+				 		System.out.println("Doctor "+ doc_id + " Schedule: " +doctorServiceImpl.getDoctorSchedule(doc_id).toString());
+						System.out.println("Enter date of appointment(yyyy-mm-dd)");
 						date = Date.valueOf(str.next());
 						patientService.requestAppointment(id, date); //LocalDate.now() as default
 						break;
 						
-				case 3: patientService.cancelAppointmentRequest(id); // maybe need to add appointment id and list of appointments
-						break; //may require date for more appointments
+				case 3: List<String> appointments = patientService.getMyAppointments(id);
+						if(appointments == null) {
+							System.out.println("No appointments requested.");
+							break;
+						}
+						else {
+							System.out.println("Displaying all appointments: ");
+							for(String appointment: appointments)
+								System.out.println(appointment);
+						}
+						System.out.println("Enter appointment id for cancellation: ");
+						patientService.cancelAppointmentRequest(sc.nextInt());
+						break;
 					
-				case 4: System.out.println("Enter new date of appointment");
+				case 4: List<String> allAppointments = patientService.getMyAppointments(id);
+						if(allAppointments == null) {
+							System.out.println("No appointments requested.");
+							break;
+						}
+						else {
+							System.out.println("Displaying all appointments: ");
+							for(String appointment: allAppointments)
+								System.out.println(appointment);
+						}
+						System.out.println("Enter appointment id for rescheduling: ");
+						int aid = sc.nextInt();
+						System.out.println("Enter new date of appointment");
 						date = Date.valueOf(str.next());
-						patientService.rescheduleAppointment(id, date); //improvisation required
+						patientService.rescheduleAppointment(aid, date);
 						break;
 				
 				case 5: System.exit(0);
@@ -192,9 +226,9 @@ public class PresentationImpl implements Presentation {
 				PatientServiceImpl patientServiceImpl = new PatientServiceImpl();
 			
 				System.out.println("1. View Patient Profile ");
-				System.out.println("2. Update Patient Profile");
-				System.out.println("3. View Doctor Schedule");
-				System.out.println("4. Update Doctor Schedule");
+				System.out.println("2. View Doctor Schedule");
+				System.out.println("3. Update Doctor Schedule");
+				System.out.println("4. Exit");
 	
 				select = sc.nextInt();
 				
@@ -202,15 +236,11 @@ public class PresentationImpl implements Presentation {
 				case 1:	System.out.println("Enter Patient ID: ");
 						patientServiceImpl.getPatientProfile(str.next());
 						break;
-				
-				case 2: System.out.println("To be done");
-						break;
 						
-				case 3:	System.out.println("Doctor Schedule:\n"+ doctorService.getDoctorSchedule(id).toString());
-						// maybe need to add appointment id and list of appointments
+				case 2:	System.out.println("Doctor Schedule:\n"+ doctorService.getDoctorSchedule(id).toString());
 						break;
 					
-				case 4: System.out.println("Enter Schedule details to be updated:");
+				case 3: System.out.println("Enter Schedule details to be updated:");
 						
 						System.out.println("Enter Doc ID: ");
 						String doctor_id = str.next();  
@@ -234,7 +264,7 @@ public class PresentationImpl implements Presentation {
 							System.out.println("Unable to update Schedule!!");
 						break;
 				
-				case 5: System.exit(0);
+				case 4: System.exit(0);
 				
 				default: System.out.println("Wrong Input!!");
 				}
@@ -243,10 +273,8 @@ public class PresentationImpl implements Presentation {
 		case 3:	AdminServiceImpl adminService = new AdminServiceImpl();
 				System.out.println("1. Generate Appointment ");
 				System.out.println("2. Cancel Appointment ");
-//				System.out.println("3. Add Patient");
-//				System.out.println("4. Remove Patient");
-				System.out.println("5. Register Doctor To Database");
-				System.out.println("6. Remove Doctor");
+				System.out.println("3. Register Doctor To Database");
+				System.out.println("4. Remove Doctor");
 				
 				select = sc.nextInt();
 				
@@ -258,13 +286,11 @@ public class PresentationImpl implements Presentation {
 						else
 							System.out.println("No appointment generated");
 						break;
+						
 				case 2:	System.out.println("Cancel Appointment");
 						break;
-//				case 3:	System.out.println("Add Patient");
-//						break;
-//				case 4:	System.out.println("Remove Patient");
-//						break;
-				case 5:	System.out.println("Register Doctor To Database");
+						
+				case 3:	System.out.println("Register Doctor To Database");
 						System.out.println("Enter doctor details:");
 						Doctor doc = new Doctor();
 						System.out.println("Enter name: "); 		doc.setName(sl.nextLine());
@@ -281,7 +307,7 @@ public class PresentationImpl implements Presentation {
 							System.out.println("Doctor can't be added");
 						break;
 						
-				case 6: System.out.println("Enter Doctor Id to be removed: "); 
+				case 4: System.out.println("Enter Doctor Id to be removed: "); 
 						String doctorID = str.next();
 						if(adminService.removeDoctorFromDatabase(doctorID)) {
 							System.out.println(doctorID + " doctor ID is removed");
@@ -289,6 +315,7 @@ public class PresentationImpl implements Presentation {
 						else
 							System.out.println("Unable to remove doctorID "+ doctorID);
 				 		break;
+				 		
 				default:System.out.println("Wrong Input!!");
 				}
 				break;
@@ -300,8 +327,13 @@ public class PresentationImpl implements Presentation {
 	
 	@Override
 	public void register() {
-				
+		
+		ValidateUserServiceImpl user = new ValidateUserServiceImpl();
 		Patient patient = new Patient(); 
+		PatientServiceImpl impl = new PatientServiceImpl();
+		
+		patient.setCounter(impl.getLastPatientId());
+		
 		patient.setPersonId("P" + patient.getCounter());
 		System.out.println("Enter Patient Name : ");
 		patient.setName(sl.nextLine());
@@ -311,16 +343,16 @@ public class PresentationImpl implements Presentation {
 		patient.setGender(str.next());
 		System.out.println("Enter patient contactNumber : ");
 		patient.setContactNumber(str.next());
-		System.out.println("Enter patient department : ");
-		patient.setDepartment(str.next());
+		System.out.println("Enter patient address: ");
+		patient.setAddress(sl.nextLine());
+		System.out.println("Enter patient symptoms : ");
+		patient.setDepartment(sl.nextLine());
 
-		ValidateUserServiceImpl user = new ValidateUserServiceImpl();
 
 		boolean registrationStatus = user.registerPatient(patient);
 
 		if(registrationStatus) { 
 			String password;
-			patient.updateCounter();
 			System.out.println("User registered Successfully");
 			System.out.println("Please note your Id for future references");
 			System.out.println("ID: "+ patient.getPersonId());	
@@ -328,9 +360,9 @@ public class PresentationImpl implements Presentation {
 			password = str.next();
 			// store this password & id in Login database
 			if(user.registerUser(patient.getPersonId(), password))
-				System.out.println("Credentials generated");
+				System.out.println("User registered in system");
 			else
-				System.out.println("Credentials not generated");
+				System.out.println("User not registered");
 		}else {
 			System.out.println("Operation failed");
 			System.out.println("Please try again.");

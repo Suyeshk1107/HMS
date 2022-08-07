@@ -2,6 +2,7 @@ package com.service;
 
 //import java.sql.Date;
 import java.util.Date;
+import java.util.List;
 
 import com.bean.Patient;
 import com.persistence.AppointmentDaoImpl;
@@ -18,12 +19,12 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public void cancelAppointmentRequest(String id) {
-
+	public void cancelAppointmentRequest(int i) {
+		
 	}
 
 	@Override
-	public void rescheduleAppointment(String id, Date newDate) {
+	public void rescheduleAppointment(int aid, Date newDate) {
 		
 	}
 
@@ -31,6 +32,16 @@ public class PatientServiceImpl implements PatientService {
 	public void getPatientProfile(String id) {
 		Patient patient = patientDaoImpl.getPatientById(id);
 		System.out.println(patient.toString());
+	}
+
+	@Override
+	public int getLastPatientId() {
+		return patientDaoImpl.getLastPId();
+	}
+	
+	@Override
+	public List<String> getMyAppointments(String pid) {
+		return appointmentDaoImpl.getAllAppointments(pid);
 	}
 
 }

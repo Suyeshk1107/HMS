@@ -41,5 +41,4 @@ public class ValidateUserServiceImpl implements ValidateUserService {
 	public boolean registerUser(String id, String Password) {
 		return loginDaoImpl.registerUser(id, Password);
 	}
-
 }

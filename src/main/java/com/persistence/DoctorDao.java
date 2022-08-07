@@ -21,4 +21,6 @@ public interface DoctorDao {
 	String getEmergencyContact(String doctorId);
 
 	Doctor getDoctorDetails(String doctorId);
+
+	int getLastDId();
 }
