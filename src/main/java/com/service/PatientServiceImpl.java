@@ -1,7 +1,6 @@
 package com.service;
 
-//import java.sql.Date;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 import com.bean.Patient;
@@ -14,18 +13,8 @@ public class PatientServiceImpl implements PatientService {
 	PatientDaoImpl patientDaoImpl = new PatientDaoImpl();
 	
 	@Override
-	public void requestAppointment(String id, Date date) {
-		appointmentDaoImpl.appointment(id, date.toString());
-	}
-
-	@Override
-	public void cancelAppointmentRequest(int i) {
-		
-	}
-
-	@Override
-	public void rescheduleAppointment(int aid, Date newDate) {
-		
+	public boolean rescheduleAppointment(int aid, Date newDate) {
+		return appointmentDaoImpl.reschedule(aid, newDate);
 	}
 
 	@Override
@@ -40,8 +29,19 @@ public class PatientServiceImpl implements PatientService {
 	}
 	
 	@Override
-	public List<String> getMyAppointments(String pid) {
-		return appointmentDaoImpl.getAllAppointments(pid);
+	public List<String> getMyAppointments(String pid, int choice) {
+		return appointmentDaoImpl.getAllAppointments(pid, choice);
 	}
+
+	@Override
+	public void requestAppointment(String id, String doc_id, Date date) {
+		appointmentDaoImpl.appointment(id, doc_id, date);
+	}
+
+	@Override
+	public boolean cancelAppointmentRequest(int nextInt) {
+		return appointmentDaoImpl.cancelAppointment(nextInt);
+	}
+
 
 }

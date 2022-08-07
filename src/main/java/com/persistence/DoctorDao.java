@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 import com.bean.Doctor;
+import com.bean.Schedule;
 
 public interface DoctorDao {
 
@@ -16,7 +17,7 @@ public interface DoctorDao {
 	
 	boolean removeDoctor(String doctorId);
 	
-	List<Doctor> getAvailableDoctors(Date date);
+	List<Schedule> getAvailableDoctors(Date date);
 
 	String getEmergencyContact(String doctorId);
 

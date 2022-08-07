@@ -13,6 +13,7 @@ import java.sql.Date;
 import java.util.List;
 
 import com.bean.Doctor;
+import com.bean.Schedule;
 
 public class DoctorDaoImpl implements DoctorDao {
 
@@ -139,13 +140,13 @@ public class DoctorDaoImpl implements DoctorDao {
 	}
 
 	@Override 
-	public List<Doctor> getAvailableDoctors(Date date) { 
+	public List<Schedule> getAvailableDoctors(Date date) { 
 
-		List<Doctor> getAvailableDoctors = new ArrayList<>();
+		List<Schedule> getAvailableDoctors = new ArrayList<>();
 		
 		try{
 			this.connection = connectDB();
-			preparedStatement = connection.prepareStatement("select * from DOCTOR where available_day = ?");
+			preparedStatement = connection.prepareStatement("select * from regular_schedule where available_day = ?");
 			
 			Format f = new SimpleDateFormat("EEEE");  
 			String day = f.format(date);
@@ -156,17 +157,13 @@ public class DoctorDaoImpl implements DoctorDao {
 			
 			while(resultSet.next()) {
 				
-				Doctor doctor = new Doctor(
+				Schedule doctor = new Schedule(
 						resultSet.getString("doctor_id"),
 						resultSet.getString("name_of_doctor"),
-						resultSet.getString("specialisation"),
-						resultSet.getInt("experience"),
-						resultSet.getString("gender"),
-						resultSet.getInt("age"),
-						resultSet.getString("Contact_number"),
-						resultSet.getString("Address"));
+						resultSet.getString("available_day"),
+						resultSet.getTime("slot_start"),
+						resultSet.getTime("slot_end"));
 				getAvailableDoctors.add(doctor);
-				
 			}
 
 		} catch (SQLException e) {
@@ -185,7 +182,7 @@ public class DoctorDaoImpl implements DoctorDao {
 			
 			doctor.setCounter(getLastDId());
 			
-			doctor.setPersonId("D" + doctor.getCounter());
+			doctor.setPersonId("D" + (doctor.getCounter()));
 			preparedStatement.setString(1, doctor.getPersonId());
 			preparedStatement.setString(2, doctor.getName());
 			preparedStatement.setString(3, doctor.getDepartment());

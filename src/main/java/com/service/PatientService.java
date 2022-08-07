@@ -1,19 +1,19 @@
 package com.service;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 public interface PatientService {
 
 	void getPatientProfile(String id);
 
-	void requestAppointment(String id, Date date);
-
 	int getLastPatientId();
 
-	List<String> getMyAppointments(String pid);
+	boolean rescheduleAppointment(int aid, Date newDate);
 
-	void cancelAppointmentRequest(int i);
+	void requestAppointment(String id, String doc_id, Date date);
 
-	void rescheduleAppointment(int aid, Date newDate);
+	boolean cancelAppointmentRequest(int nextInt);
+
+	List<String> getMyAppointments(String pid, int choice);
 }

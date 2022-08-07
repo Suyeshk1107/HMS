@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 import com.bean.Doctor;
+import com.bean.Schedule;
 import com.persistence.DoctorDaoImpl;
 import com.persistence.PatientDaoImpl;
 
@@ -14,26 +15,13 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Override
 	public boolean generateAppointment(String patientId) {
-		
 		return false;
 	}
 
 	@Override
 	public boolean cancelAppointment(String patientId) {
-		// TODO Auto-generated method stub
 		return false;
 	}
-
-//	@Override
-//	public boolean addPatient(String doctorId, String patientId) {
-//		return false;
-//	}
-//
-//	@Override
-//	public boolean removePatient(String doctorId, String patientId) {
-//		// TODO Auto-generated method stub
-//		return false;
-//	}
 
 	@Override
 	public boolean registerDoctorToDatabase(Doctor doctor) {
@@ -46,15 +34,9 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public List<Doctor> getAvailableDoctors(Date date) {
+	public List<Schedule> getAvailableDoctors(Date date) {
 		return doctorDaoImpl.getAvailableDoctors(date);
 	}
-
-//	@Override
-//	public boolean displayAvailableDoctors() {
-//		// TODO Auto-generated method stub
-//		return false;
-//	}
 
 	
 }

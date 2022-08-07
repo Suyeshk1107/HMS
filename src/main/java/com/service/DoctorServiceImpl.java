@@ -4,9 +4,9 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.bean.Doctor;
 import com.bean.Patient;
 import com.bean.Schedule;
+import com.persistence.AppointmentDaoImpl;
 import com.persistence.DoctorDaoImpl;
 import com.persistence.PatientDaoImpl;
 import com.persistence.ScheduleDaoImpl;
@@ -16,6 +16,7 @@ public class DoctorServiceImpl implements DoctorService {
 	PatientDaoImpl patientDaoImpl = new PatientDaoImpl();
 	ScheduleDaoImpl scheduleDaoImpl = new ScheduleDaoImpl();
 	DoctorDaoImpl doctorDaoImpl = new DoctorDaoImpl();
+	AppointmentDaoImpl appointmentDaoImpl = new AppointmentDaoImpl();
 	
 	@Override
 	public Patient getPatientProfile(String patientId) {
@@ -41,21 +42,26 @@ public class DoctorServiceImpl implements DoctorService {
 	}
 
 	@Override
-	public List<Doctor> getAvailableDoctors(Date date) {
+	public List<Schedule> getAvailableDoctors(Date date) {
 		return doctorDaoImpl.getAvailableDoctors(date);
 	}
 
 	@Override
 	public void displayAvailableDoctors(Date date) {
-		List<Doctor> doctors = getAvailableDoctors(date);
+		List<Schedule> doctors = getAvailableDoctors(date);
 		if (doctors == null){
 			System.out.println("No Doctor Available");
 		} 
 		else {
-			for(Doctor doc: doctors) {
+			for(Schedule doc: doctors) {
 				System.out.println(doc.toString());
 			}
 		}
+	}
+	
+	@Override
+	public List<String> getMyAppointments(String id, int choice) {
+		return appointmentDaoImpl.getAllAppointments(id, choice);
 	}
 
 }

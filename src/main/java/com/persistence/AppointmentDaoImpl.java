@@ -1,12 +1,12 @@
 package com.persistence;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -21,23 +21,23 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	private Connection connection;
 	private PreparedStatement preparedStatement;
 	private ResultSet resultSet;
+	private CallableStatement callableStatement;
 	LoginDaoImpl loginDaoImpl = new LoginDaoImpl();
 	
 	Connection connectDB() throws SQLException {
 		return DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital", "root", "wiley");
 	}
 	
-	public void appointment(String patient_id, String new_date) {
-//		127.0.0.1:3306
-//		localhost:3306
-		LocalTime end_slot = null;
+	public void appointment(String patient_id, String doc_id, Date date2) {
+
 		try{
 			this.connection = connectDB();
-			this.preparedStatement = connection.prepareStatement("call book_appointment(?)");
+			callableStatement=connection.prepareCall("{call book_appointment(?,?)}");
+						
+			callableStatement.setString(1, patient_id);
+			callableStatement.setString(2, doc_id);
 
-			preparedStatement.setString(1, patient_id);
-
-			resultSet = preparedStatement.executeQuery();
+			resultSet = callableStatement.executeQuery();
 
 			if (resultSet.next()) {
 				String p_id = resultSet.getString("Patient Id");
@@ -48,11 +48,12 @@ public class AppointmentDaoImpl implements AppointmentDao {
 				String d_name = resultSet.getString("Appointed Doctor");
 				String dept = resultSet.getString("Department");
 
-				Date date = Date.valueOf(new_date);
+				Date date = date2;
 				String new_slot = checkSlot(slot, d_id, date);
+//				System.out.println(new_slot+ " " +slot_end);
 		
-				end_slot = LocalTime.parse(slot_end);
-				int a = new_slot.compareTo(end_slot.toString());
+//				int a = new_slot.compareTo(LocalTime.parse(slot_end).toString());
+				int a = new_slot.compareTo(slot_end);
 				
 				if(a != 0) {
 					storeAppointment(p_id, p_name, new_slot, date, d_id, d_name, dept);
@@ -106,7 +107,14 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	public void storeAppointment(String p_id, String p_name, String new_slot, Date date, String d_id, String d_name, String dept) {
 		try{
 			this.connection = connectDB();
-			preparedStatement = connection.prepareStatement("INSERT INTO Appointments values(?,?,?,?,?,?,?)");
+			preparedStatement = connection.prepareStatement("INSERT INTO Appointments(patient_id,"
+					+ "name_of_patient,"
+					+ "slot,"
+					+ "date_of_appointment,"
+					+ "doctor_id,"
+					+ "name_of_doctor,"
+					+ "department"
+					+ ") values(?,?,?,?,?,?,?)");
 
 			preparedStatement.setString(1, p_id);
 			preparedStatement.setString(2, p_name);
@@ -150,26 +158,91 @@ public class AppointmentDaoImpl implements AppointmentDao {
 		
 	}
 	
-	public List<String> getAllAppointments(String pid) {
+	@Override
+	public List<String> getAllAppointments(String id, int choice) {
 		
 		List<String> appointments = new ArrayList<>();
 		try{
 			this.connection = connectDB();
-			preparedStatement = connection.prepareStatement("select * from Appointments where patient_id=?");
-
-			preparedStatement.setString(1, pid);
-
-			resultSet = preparedStatement.executeQuery();
 			
-			while(resultSet.next()) {
-				appointments.add("[AppointmentID: "+resultSet.getInt("appointment_id")+","
-						+ " Slot: "+ resultSet.getTime(3) +", Date of Appointment: "+ resultSet.getDate(4) 
-						+", DoctorID:" + resultSet.getString(5) + ", Doctor Name: "+ resultSet.getString(6) +"]");		
+			if(choice == 1) {
+				preparedStatement = connection.prepareStatement("select * from Appointments where patient_id=?");
+
+				preparedStatement.setString(1, id);
+
+				resultSet = preparedStatement.executeQuery();
+				
+				while(resultSet.next()) {
+					appointments.add("[AppointmentID: "+resultSet.getInt("appointment_id")+","
+							+ " Slot: "+ resultSet.getTime("slot") +", Date of Appointment: "+ resultSet.getDate("date_of_appointment")  
+							+", DoctorID:" + resultSet.getString("doctor_id") + ", Doctor Name: "+ resultSet.getString("name_of_doctor") +"]");		
+				}
 			}
+			else if(choice == 2) {
+				preparedStatement = connection.prepareStatement("select * from Appointments where doctor_id=?");
+
+				preparedStatement.setString(1, id);
+
+				resultSet = preparedStatement.executeQuery();
+				
+				while(resultSet.next()) {
+					appointments.add("[AppointmentID: "+resultSet.getInt("appointment_id")+","
+							+ " Slot: "+ resultSet.getTime("slot") +", Date of Appointment: "+ resultSet.getDate("date_of_appointment") 
+							+", PatientID:" + resultSet.getString("patient_id") + ", Patient Name: "+ resultSet.getString("name_of_patient") +"]");		
+				}
+			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return appointments;
+	}
+
+	@Override
+	public boolean cancelAppointment(int aid) {
+		int rows = 0;
+		try {
+			
+			this.connection = connectDB();
+			preparedStatement = connection.prepareStatement("delete from Appointments where appointment_id=?");
+
+			preparedStatement.setInt(1, aid);
+
+			rows = preparedStatement.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if(rows > 0)
+			return true;
+		return false;
+	}
+
+	public boolean reschedule(int aid, Date newDate) {
+		int rows = 0;
+		try {
+			
+			this.connection = connectDB();
+			preparedStatement = connection.prepareStatement("select patient_id,"
+					+ "doctor_id,"
+					+ "department from Appointments where appointment_id=?");
+
+			preparedStatement.setInt(1, aid);
+
+			resultSet = preparedStatement.executeQuery();
+			
+			if(resultSet.next()) {
+				if(cancelAppointment(aid)) {
+					appointment(resultSet.getString("patient_id"), resultSet.getString("doctor_id"), newDate);
+					rows = 1;
+				} 
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if(rows > 0)
+			return true;
+		return false;
 	}
 	
 }

@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 import com.bean.Doctor;
+import com.bean.Schedule;
 
 public interface AdminService {
 
@@ -19,7 +20,7 @@ public interface AdminService {
 	
 	boolean registerDoctorToDatabase(Doctor doctor); // add this to menu options in admin login
 	
-	List<Doctor> getAvailableDoctors(Date date);
+	List<Schedule> getAvailableDoctors(Date date);
 
 	boolean removeDoctorFromDatabase(String doctorID);
 	
