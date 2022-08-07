@@ -102,7 +102,7 @@ drop procedure book_appointment;
 
 DELIMITER $$
 USE `hospital`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `book_appointment`(in id varchar(5))
+CREATE DEFINER=`root`@`localhost` PROCEDURE `book_appointment`(in id varchar(5), in doc_id varchar(5))
 BEGIN
 declare pId varchar(5);
 declare pName varchar(25);
@@ -118,7 +118,7 @@ where patient_id = id;
 
 select doctor_id, name_of_doctor into dId, dName
 from doctor
-where specialisation = pDept limit 1;
+where doctor_id = doc_id;
 
 select slot_start, slot_end into slot_s, slot_e
 from regular_schedule 
@@ -131,4 +131,4 @@ END$$
 DELIMITER ;
 ;
 
-call book_appointment('P103');
+call book_appointment('P103','D1001');
