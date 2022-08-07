@@ -2,15 +2,15 @@ package com.presentation;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
 import com.bean.Doctor;
 import com.bean.Patient;
+import com.bean.PrevSlots;
 import com.bean.Schedule;
-import com.persistence.LoginDaoImpl;
 import com.service.AdminServiceImpl;
+import com.service.AppointmentServiceImpl;
 import com.service.DoctorServiceImpl;
 import com.service.PatientServiceImpl;
 import com.service.ValidateUserServiceImpl;
@@ -158,34 +158,39 @@ public class PresentationImpl implements Presentation {
 		switch(choice) {
 		
 		case 1:	PatientServiceImpl patientService = new PatientServiceImpl();
-				DoctorServiceImpl doctorServiceImpl = new DoctorServiceImpl();
+				AppointmentServiceImpl appointmentServiceImpl = new AppointmentServiceImpl();
 			
 				System.out.println("1. User profile(Patient)");
-				System.out.println("2. Request Appointment");
-				System.out.println("3. Cancel Appointment Request");
-				System.out.println("4. Reschedule appointment ");
-				System.out.println("5. Exit.");
+				System.out.println("2. Show Appointment Slots");
+				System.out.println("3. Request Appointment");
+				System.out.println("4. Cancel Appointment Request");
+				System.out.println("5. Reschedule appointment ");
+				System.out.println("6. Exit.");
 				
 				select = sc.nextInt();
 				
 				switch (select) {
 				case 1:	patientService.getPatientProfile(id);
 						break;
-				
-				case 2: System.out.println("Available doctors:");
-				 		List<Doctor> docs = doctorServiceImpl.getAvailableDoctors(Date.valueOf(LocalDate.now()));
-				 		for(Doctor doc: docs) {
-				 			System.out.println(doc.toString());
-				 		}
-				 		System.out.println("Please select doctor id: ");
-				 		String doc_id = str.next();
-				 		System.out.println("Doctor "+ doc_id + " Schedule: " +doctorServiceImpl.getDoctorSchedule(doc_id).toString());
-						System.out.println("Enter date of appointment(yyyy-mm-dd)");
-						date = Date.valueOf(str.next());
-						patientService.requestAppointment(id, date); //LocalDate.now() as default
+
+				case 2: System.out.println("Enter Doctor Id : ");
+						List<PrevSlots> prevSlots =  appointmentServiceImpl.prevSlots(str.next());
+						for(PrevSlots e:prevSlots) {
+							System.out.println(e);
+						}
 						break;
-						
-				case 3: List<String> appointments = patientService.getMyAppointments(id);
+				case 3: System.out.println("Enter date of appointment(yyyy-mm-dd)");
+						date = Date.valueOf(str.next());
+						System.out.println("List of Available Doctors:");
+				 		List<Doctor> docs = new DoctorServiceImpl().getAvailableDoctors(date);
+						for(Doctor doc: docs) {
+							System.out.println(doc.toString());
+						}
+						System.out.println("Select Doctor ID for appointment:");
+						patientService.requestAppointment(str.next(), date); //LocalDate.now() as default
+						break;
+
+				case 4: List<String> appointments = patientService.getMyAppointments(id);
 						if(appointments == null) {
 							System.out.println("No appointments requested.");
 							break;
@@ -198,8 +203,8 @@ public class PresentationImpl implements Presentation {
 						System.out.println("Enter appointment id for cancellation: ");
 						patientService.cancelAppointmentRequest(sc.nextInt());
 						break;
-					
-				case 4: List<String> allAppointments = patientService.getMyAppointments(id);
+
+				case 5: List<String> allAppointments = patientService.getMyAppointments(id);
 						if(allAppointments == null) {
 							System.out.println("No appointments requested.");
 							break;
@@ -216,7 +221,7 @@ public class PresentationImpl implements Presentation {
 						patientService.rescheduleAppointment(aid, date);
 						break;
 				
-				case 5: System.exit(0);
+				case 6: System.exit(0);
 				
 				default: System.out.print("Wrong Input!!");
 				}

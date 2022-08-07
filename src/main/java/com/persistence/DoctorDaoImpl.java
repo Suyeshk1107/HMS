@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
@@ -144,10 +146,11 @@ public class DoctorDaoImpl implements DoctorDao {
 		try{
 			this.connection = connectDB();
 			preparedStatement = connection.prepareStatement("select * from DOCTOR where available_day = ?");
-
-			int day = date.getDay();
 			
-			preparedStatement.setInt(1, day);
+			Format f = new SimpleDateFormat("EEEE");  
+			String day = f.format(date);
+			
+			preparedStatement.setString(1, day);
 
 			resultSet = preparedStatement.executeQuery();
 			

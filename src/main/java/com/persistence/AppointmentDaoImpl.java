@@ -6,24 +6,38 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Time;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import com.bean.PrevSlots;
 
 public class AppointmentDaoImpl implements AppointmentDao {
+	
 	ArrayList<String> list = new ArrayList<>();
+	List<PrevSlots> prevSlots = new ArrayList<>();
+	
+	private Connection connection;
+	private PreparedStatement preparedStatement;
+	private ResultSet resultSet;
+	LoginDaoImpl loginDaoImpl = new LoginDaoImpl();
+	
+	Connection connectDB() throws SQLException {
+		return DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital", "root", "wiley");
+	}
 	
 	public void appointment(String patient_id, String new_date) {
-		
-
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital", "root",
-				"wiley");
-				PreparedStatement preparedStatement = connection
-						.prepareStatement("call book_appointment(?)");) {
+//		127.0.0.1:3306
+//		localhost:3306
+		LocalTime end_slot = null;
+		try{
+			this.connection = connectDB();
+			this.preparedStatement = connection.prepareStatement("call book_appointment(?)");
 
 			preparedStatement.setString(1, patient_id);
 
-			ResultSet resultSet = preparedStatement.executeQuery();
+			resultSet = preparedStatement.executeQuery();
 
 			if (resultSet.next()) {
 				String p_id = resultSet.getString("Patient Id");
@@ -37,17 +51,17 @@ public class AppointmentDaoImpl implements AppointmentDao {
 				Date date = Date.valueOf(new_date);
 				String new_slot = checkSlot(slot, d_id, date);
 		
-				int a = new_slot.compareTo(slot_end);
-				if(a == 0) {
+				end_slot = LocalTime.parse(slot_end);
+				int a = new_slot.compareTo(end_slot.toString());
+				
+				if(a != 0) {
 					storeAppointment(p_id, p_name, new_slot, date, d_id, d_name, dept);
 					System.out.println(p_id+" "+p_name+" "+new_slot+" "+date+" "+d_id+" "+d_name+" "+dept);
 				}
 				else
 					System.out.println("No slot present for the date :"+date);
 				
-			}
-			
-			
+			}		
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -57,15 +71,14 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	
 	public String checkSlot(String slot_to_check, String d_id, Date date) {
 		LocalTime new_slot = null;
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital", "root",
-				"wiley");
-				PreparedStatement preparedStatement = connection
-						.prepareStatement("select slot from appointments where doctor_id = ? AND date_of_appointment = ?");) {
+		try {
+			this.connection = connectDB();
+			preparedStatement = connection.prepareStatement("select slot from appointments where doctor_id = ? AND date_of_appointment = ?");
 
 			preparedStatement.setString(1, d_id);
 			preparedStatement.setDate(2, date);
 
-			ResultSet resultSet = preparedStatement.executeQuery();
+			resultSet = preparedStatement.executeQuery();
 
 			while (resultSet.next()) {
 				String slot_present = resultSet.getString("slot");
@@ -74,13 +87,11 @@ public class AppointmentDaoImpl implements AppointmentDao {
 				
 			}if(list.isEmpty()) {
 				return slot_to_check;}
-			for(String e:list) {
-				System.out.println(e);
-			}
+			
 			String last_slot = list.get(list.size()-1);
 			new_slot = LocalTime.parse(last_slot);
 			new_slot = new_slot.plusMinutes(20);
-			System.out.println(new_slot);
+			
 			
 			
 
@@ -93,10 +104,9 @@ public class AppointmentDaoImpl implements AppointmentDao {
 	
 	
 	public void storeAppointment(String p_id, String p_name, String new_slot, Date date, String d_id, String d_name, String dept) {
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital", "root",
-				"wiley");
-				PreparedStatement preparedStatement = connection
-						.prepareStatement("INSERT INTO Appointments values(?,?,?,?,?,?,?)");) {
+		try{
+			this.connection = connectDB();
+			preparedStatement = connection.prepareStatement("INSERT INTO Appointments values(?,?,?,?,?,?,?)");
 
 			preparedStatement.setString(1, p_id);
 			preparedStatement.setString(2, p_name);
@@ -117,32 +127,49 @@ public class AppointmentDaoImpl implements AppointmentDao {
 
 	}
 	
+	public List<PrevSlots> prevAppointments(String dId) {
+		
+		try{ 
+			this.connection = connectDB();
+			preparedStatement = connection.prepareStatement("select slot, date_of_appointment from appointments where doctor_id = ?");
+
+			preparedStatement.setString(1, dId);
+
+			resultSet = preparedStatement.executeQuery();
+			
+			while(resultSet.next()) {
+				Time slot = resultSet.getTime("slot");
+				Date date = resultSet.getDate("date_of_appointment");
+				prevSlots.add(new PrevSlots(slot, date));
+			}			
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return prevSlots;
+		
+	}
+	
 	public List<String> getAllAppointments(String pid) {
 		
 		List<String> appointments = new ArrayList<>();
-		try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital", "root",
-				"wiley");
-				PreparedStatement preparedStatement = connection
-						.prepareStatement("select * from Appointments where patient_id=?");) {
+		try{
+			this.connection = connectDB();
+			preparedStatement = connection.prepareStatement("select * from Appointments where patient_id=?");
 
 			preparedStatement.setString(1, pid);
 
-			ResultSet resultSet = preparedStatement.executeQuery();
+			resultSet = preparedStatement.executeQuery();
 			
 			while(resultSet.next()) {
 				appointments.add("[AppointmentID: "+resultSet.getInt("appointment_id")+","
 						+ " Slot: "+ resultSet.getTime(3) +", Date of Appointment: "+ resultSet.getDate(4) 
 						+", DoctorID:" + resultSet.getString(5) + ", Doctor Name: "+ resultSet.getString(6) +"]");		
 			}
-			
-			
-
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return appointments;
 	}
 	
-	
-
 }
